@@ -18,6 +18,10 @@ export class App extends Component {
       viewMapImage: false,
       viewError: false,
       errorMessage: 'No data',
+      viewWeatherData: false,
+      weatherDataArr: [],
+      forecastData: [],
+      moviesDataArr: [],
     }
   }
 
@@ -37,6 +41,18 @@ export class App extends Component {
       viewMapImage: !false,
       viewError: false,
     });
+
+    console.log(this.state.forecastData);
+    const movieUrl = `${process.env.REACT_APP_SERVER_URL}movies?query=${locationName}`
+    const moviesGet = await axios.get(movieUrl);
+    console.log(moviesGet);
+
+    this.setState({
+      moviesDataArr: moviesGet.results,
+      show: true,
+      viewError: false,
+    })
+    
     }
   catch (fault){
     this.setState(
@@ -85,6 +101,32 @@ export class App extends Component {
 
 {this.state.errorMessage} 
 
+
+{
+              this.state.forecastData.map(weather => {
+                return (
+                  <div>
+                    <p>{weather.date}</p>
+                    <p>{weather.description}</p>
+
+                  </div>
+                )
+              })
+
+            }
+
+            {
+              this.state.moviesDataArr.map(movie => {
+                return (
+                  <div>
+                    <p>{movie.original_title}</p>
+                    <p>{movie.vote_count}</p>
+                    <p>{movie.overview}</p>
+                    <p>{movie.realesed_on}</p>
+
+                  </div>
+                )
+              })}
 </div>
 <Footer />
       </div>
